@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!--配置要链接的数据库的数据源-->
+  <classPathEntry
+    location="D:\.m2\mysql\mysql-connector-java\8.0.26\mysql-connector-java-8.0.26.jar"/>
+  <!---Mybatis上下文-->
+  <context id="MySqlContext" targetRuntime="MyBatis3">
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+    <property name="javaFileEncoding" value="UTF-8"/>
+
+    <commentGenerator>
+      <!-- suppressDate是去掉生成日期那行注释，suppressAllComments是去掉所有的注解 -->
+      <property name="suppressDate" value="true"/>
+      <!-- 在生成的实体类中附带表字段的注释  MBG1.3.3中新增的功能 -->
+      <property name="addRemarkComments" value="true"/>
+    </commentGenerator>
+
+    <!--配置数据库的链接信息-->
+    <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+      connectionURL="jdbc:mysql://192.168.123.3:3306/fund?useSSL=true&amp;characterEncoding=UTF-8"
+      userId="xkrato"
+      password="xcwwy"/>
+    <!--数据库BigDecimals字段在java中定义-->
+
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!--实体类生成信息-->
+    <javaModelGenerator targetPackage="com.xkrato.fund.domain" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!--mybatis 的xml文件地址-->
+    <sqlMapGenerator targetPackage="mybatis" targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!--mybatis的mapper接口-->
+    <javaClientGenerator targetPackage="com.xkrato.fund.mapper" targetProject="src/main/java"
+      type="XMLMAPPER">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--要生成的表结构-->
+    <table tableName="fund_manager" domainObjectName="FundManager"/>
+    <!--<table tableName="fund_manager" domainObjectName="FundManager"-->
+    <!--enableCountByExample="false" enableUpdateByExample="false"-->
+    <!--enableDeleteByExample="false" enableSelectByExample="false"-->
+    <!--selectByExampleQueryId="false">-->
+    <!--</table>-->
+  </context>
+</generatorConfiguration>
