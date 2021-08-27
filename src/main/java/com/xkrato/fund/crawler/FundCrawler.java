@@ -1,17 +1,17 @@
 package com.xkrato.fund.crawler;
 
+import com.xkrato.fund.service.impl.FundServiceImpl;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import java.util.Set;
 import java.util.regex.Pattern;
-import lombok.Data;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
-@Data
 @Component
-public class FundManagerCrawler extends WebCrawler {
+public class FundCrawler extends WebCrawler {
 
   private static final Pattern FILTERS =
       Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
@@ -29,16 +29,12 @@ public class FundManagerCrawler extends WebCrawler {
   public void visit(Page page) {
     String url = page.getWebURL().getURL();
     System.out.println("URL: " + url);
-
-    if (page.getParseData() instanceof HtmlParseData) {
-      HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-      String text = htmlParseData.getText();
-      String html = htmlParseData.getHtml();
-      Set<WebURL> links = htmlParseData.getOutgoingUrls();
-
-      System.out.println("Text length: " + text.length());
-      System.out.println("Html length: " + html.length());
-      System.out.println("Number of outgoing links: " + links.size());
+    if (!(page.getParseData() instanceof HtmlParseData)) {
+      return;
     }
+
+    Document document = Jsoup.parse(((HtmlParseData) page.getParseData()).getHtml());
+
+    new FundServiceImpl().parseFundInfo(page.getWebURL().getPath(), document);
   }
 }

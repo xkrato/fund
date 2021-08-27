@@ -49,7 +49,7 @@
     </javaClientGenerator>
 
     <!--要生成的表结构-->
-    <table tableName="fund_manager" domainObjectName="FundManager"/>
+    <table tableName="fund" domainObjectName="Fund"/>
     <!--<table tableName="fund_manager" domainObjectName="FundManager"-->
     <!--enableCountByExample="false" enableUpdateByExample="false"-->
     <!--enableDeleteByExample="false" enableSelectByExample="false"-->
