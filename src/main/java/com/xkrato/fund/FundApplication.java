@@ -4,17 +4,18 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication
-@MapperScan("com.xkrato.fund.mapper")
 @ComponentScan({
-  "com.xkrato.fund.config.**",
-  "com.xkrato.fund.controller.**",
   "com.xkrato.fund.domain.**",
   "com.xkrato.fund.service.**",
+  "com.xkrato.fund.factory.**",
   "com.xkrato.fund.crawler.**",
   "com.xkrato.fund.schedule.**"
 })
+@MapperScan("com.xkrato.fund.mapper")
+@EnableTransactionManagement
+@SpringBootApplication
 public class FundApplication {
 
   public static void main(String[] args) {

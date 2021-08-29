@@ -1,18 +1,32 @@
 package com.xkrato.fund.crawler;
 
-import com.xkrato.fund.service.impl.FundServiceImpl;
+import com.xkrato.fund.service.IFundService;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 import java.util.regex.Pattern;
+import javax.annotation.Resource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FundCrawler extends WebCrawler {
 
+  @Value("${fund.homepage}")
+  private String FUND_HOMEPAGE;
+
+  @Value("${fund.name1}")
+  private String FUND_NAME1;
+
+  @Value("${fund.name2}")
+  private String FUND_NAME2;
+  
+  @Resource
+  private IFundService fundService;
+  
   private static final Pattern FILTERS =
       Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
 
@@ -34,7 +48,6 @@ public class FundCrawler extends WebCrawler {
     }
 
     Document document = Jsoup.parse(((HtmlParseData) page.getParseData()).getHtml());
-
-    new FundServiceImpl().parseFundInfo(page.getWebURL().getPath(), document);
+    fundService.saveFundInfo(fundService.parseFundInfo(page.getWebURL().getPath(), document));
   }
 }

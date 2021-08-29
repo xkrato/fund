@@ -88,6 +88,7 @@
     -->
     uuid, id, name, manager_id, manager_name, send_status, create_time, update_time
   </sql>
+  
   <select id="selectByExample" parameterType="com.xkrato.fund.domain.FundExample" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
@@ -106,6 +107,7 @@
       order by ${orderByClause}
     </if>
   </select>
+  
   <delete id="deleteByExample" parameterType="com.xkrato.fund.domain.FundExample">
     <!--
       WARNING - @mbg.generated
@@ -116,6 +118,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  
   <insert id="insert" parameterType="com.xkrato.fund.domain.Fund">
     <!--
       WARNING - @mbg.generated
@@ -128,6 +131,7 @@
       #{managerId,jdbcType=VARCHAR}, #{managerName,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+  
   <insert id="insertSelective" parameterType="com.xkrato.fund.domain.Fund">
     <!--
       WARNING - @mbg.generated
@@ -187,6 +191,7 @@
       </if>
     </trim>
   </insert>
+  
   <select id="countByExample" parameterType="com.xkrato.fund.domain.FundExample" resultType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
@@ -197,6 +202,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - @mbg.generated
@@ -233,6 +239,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - @mbg.generated

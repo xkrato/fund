@@ -2,7 +2,7 @@ package com.xkrato.fund.schedule;
 
 import com.xkrato.fund.service.IFundService;
 import java.util.concurrent.BlockingQueue;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class SyncFundTask {
 
-  @Autowired private IFundService fundService;
+  @Resource
+  private IFundService fundService;
   
   // TODO 临界资源后面用mq代替
   public static BlockingQueue FACK_MQ;
