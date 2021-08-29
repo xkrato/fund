@@ -7,7 +7,7 @@ spring:
       # 配置初始化大小（默认0）、最小、最大（默认8）
       initial-size: 1
       min-idle: 1
-      max-active: 2
+      max-active: 8
       # 配置获取连接等待超时的时间
       max-wait: 60000
       # 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大。 默认为false

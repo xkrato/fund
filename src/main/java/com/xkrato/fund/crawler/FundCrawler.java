@@ -1,6 +1,6 @@
 package com.xkrato.fund.crawler;
 
-import com.xkrato.fund.domain.Fund;
+import com.xkrato.fund.domain.dto.Fund;
 import com.xkrato.fund.service.IFundService;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
@@ -10,11 +10,14 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FundCrawler extends WebCrawler {
+  private static final Logger LOGGER = LoggerFactory.getLogger(FundCrawler.class);
 
   @Value("${fund.homepage}")
   private String FUND_HOMEPAGE;
@@ -48,7 +51,7 @@ public class FundCrawler extends WebCrawler {
   @Override
   public void visit(Page page) {
     String url = page.getWebURL().getURL();
-    System.out.println("URL: " + url);
+    LOGGER.info("crawler start, Current crawler url is {}", url);
     if (!(page.getParseData() instanceof HtmlParseData)) {
       return;
     }
@@ -60,5 +63,6 @@ public class FundCrawler extends WebCrawler {
     }
     
     fundService.saveFundInfo(fund);
+    LOGGER.info("crawler end.");
   }
 }

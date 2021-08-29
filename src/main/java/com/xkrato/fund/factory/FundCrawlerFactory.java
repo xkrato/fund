@@ -8,10 +8,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FundCrawlerFactory implements WebCrawlerFactory<FundCrawler>  {
+public class FundCrawlerFactory implements WebCrawlerFactory<FundCrawler> {
 
-  @Resource
-  private ApplicationContext applicationContext;
+  @Resource private ApplicationContext applicationContext;
 
   @Override
   public FundCrawler newInstance() throws BeansException {

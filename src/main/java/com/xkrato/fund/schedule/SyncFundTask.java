@@ -1,8 +1,11 @@
 package com.xkrato.fund.schedule;
 
+import com.xkrato.fund.domain.dto.Fund;
+import com.xkrato.fund.domain.enumerate.SendStatusEnum;
 import com.xkrato.fund.service.IFundService;
-import java.util.concurrent.BlockingQueue;
 import javax.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -10,47 +13,32 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableScheduling
 public class SyncFundTask {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SyncFundTask.class);
 
-  @Resource
-  private IFundService fundService;
-  
-  // TODO 临界资源后面用mq代替
-  public static BlockingQueue FACK_MQ;
+  @Resource private IFundService fundService;
 
-//  @Scheduled(cron = "0 0 0/1 * * ?")
-  @Scheduled(cron = "0/10 * * * * ?")
-  public void getFundInfo() throws InterruptedException {
-    System.out.println("get fund manager info.");
-    try {
-      fundService.getFundInfo();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * 将待处理记录推到队列（待发送和失败重派两种）
-   * TODO 先用BlockingQueue，后面改MQ
-   * 
-   * @throws InterruptedException
-   */
-  @Scheduled(cron = "0/30 * * * * ?")
-  public void pushPendingRecordToMQ() throws InterruptedException {
-    System.out.println("push pending record.");
-    // TODO push sendStatus 1/4/9 to mq
-    
-    // TODO sendStatus processing. sendStatus From 1/4/9 To 2. (1/4/9 -> 2)
+  @Scheduled(cron = "0 0/30 * * * ?")
+  //  @Scheduled(cron = "0/30 * * * * ?")
+  public void crawlerFundInfo() throws Exception {
+    LOGGER.info("******************* start crawler fund info *******************");
+    fundService.crawlerFundInfo();
+    LOGGER.info("******************* end crawler fund info *******************");
   }
 
   /**
    * 处理超时记录
-   * 
-   * @throws InterruptedException
+   *
+   * @throws Exception
    */
-  @Scheduled(cron = "0/30 * * * * ?")
-  public void syncProcessingTask() throws InterruptedException {
-    System.out.println("fix timeout record.");
-    // TODO timeout 30min. sendStatus From 2 To 4. (2 -> 4)
+  @Scheduled(cron = "0 0/1 * * * ?")
+  public void fixTimeoutRecord() throws Exception {
+    LOGGER.info("******************* start fix timeout record *******************");
+    // timeout 1h
+    // sendStatus From 2 To 4. (2 -> 4)
+    Fund record = new Fund();
+    record.setSendStatus(SendStatusEnum.TIMEOUT.val());
+    // TODO timeout need to read from config
+    fundService.fixTimeoutRecord(record, 60 * 60 * 1000);
+    LOGGER.info("******************* end fix timeout record *******************");
   }
-  
 }
