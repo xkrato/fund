@@ -1,3 +1,13 @@
 spring:
   profiles:
     active: dev
+
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml
+
+fund:
+  homepage: https://fund.eastmoney.com/
+  name1: 420102.html?spm=aladin
+  name2: 001751.html?spm=aladin
+  cache-dir: D:\Cache\fund
+  filter-types: css|js|gif|jpg|png|mp3|mp4|zip|gz

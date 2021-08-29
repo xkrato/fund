@@ -26,12 +26,3 @@ spring:
       test-on-return: false
       # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
       test-while-idle: true
-
-mybatis:
-  mapper-locations: classpath:mybatis/*.xml
-
-fund:
-  homepage: https://fund.eastmoney.com/
-  name-1: 420102.html?spm=aladin
-  name-2: 001751.html?spm=aladin
-  cache-dir: /opt/temp/crawler

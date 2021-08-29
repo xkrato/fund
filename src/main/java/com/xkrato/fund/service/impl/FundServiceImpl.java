@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import javax.annotation.Resource;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -104,10 +105,6 @@ public class FundServiceImpl implements IFundService {
 
   @Override
   public void saveFundInfo(Fund latestFund) {
-    if (latestFund == null) {
-      return;
-    }
-    
     List<Fund> funds = queryFundById(latestFund.getId());
     /* Ⅰ. If fund not exist */
     if (CollectionUtils.isEmpty(funds)) {
@@ -121,7 +118,7 @@ public class FundServiceImpl implements IFundService {
     /* Ⅱ. If fund exist */
     Fund lastFund = funds.get(0);
     // 1. If Managers have not changed, return
-    if (!Optional.ofNullable(lastFund.getManagerId())
+    if (Optional.ofNullable(lastFund.getManagerId())
         .orElse("")
         .equals(latestFund.getManagerId())) {
       return;
@@ -131,7 +128,7 @@ public class FundServiceImpl implements IFundService {
     // update sendStatus
     // sendStatus From 0/4 To 1 (0/4 -> 1)
     latestFund.setSendStatus("1");
-    updateFundById(latestFund);
+    updateFundByUuid(lastFund.getUuid(), latestFund);
   }
 
   @Override
@@ -158,23 +155,23 @@ public class FundServiceImpl implements IFundService {
     funds.forEach(
         fund -> {
           affectedRow.add(new BigInteger("1"));
+          fund.setUuid(UUID.randomUUID().toString().replaceAll("-", ""));
           fundMapper.insert(fund);
         });
     return affectedRow.intValue();
   }
 
   @Override
-  public int updateFundById(Fund latestFund) {
+  public int updateFundByUuid(String uuid, Fund latestFund) {
     FundExample example = new FundExample();
     FundExample.Criteria criteria = example.createCriteria();
-    criteria.andIdEqualTo(latestFund.getId());
+    criteria.andUuidEqualTo(uuid);
 
     latestFund.setUpdateTime(new Date());
-    int affectRows = fundMapper.updateByExample(latestFund, example);
+    int affectRows = fundMapper.updateByExampleSelective(latestFund, example);
     if (affectRows == 0) {
       System.out.println("Zero row affected.");
     }
-
     return affectRows;
   }
 }

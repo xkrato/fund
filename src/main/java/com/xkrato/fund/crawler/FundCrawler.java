@@ -1,5 +1,6 @@
 package com.xkrato.fund.crawler;
 
+import com.xkrato.fund.domain.Fund;
 import com.xkrato.fund.service.IFundService;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
@@ -24,19 +25,24 @@ public class FundCrawler extends WebCrawler {
   @Value("${fund.name2}")
   private String FUND_NAME2;
   
-  @Resource
-  private IFundService fundService;
-  
-  private static final Pattern FILTERS =
-      Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
+  @Value("${fund.filter-types}")
+  private String FILTERS_TYPE;
+
+  @Resource private IFundService fundService;
+
+  private static Pattern FILTERS;
 
   @Override
   public boolean shouldVisit(Page referringPage, WebURL url) {
+    if (FILTERS == null) {
+      FILTERS = Pattern.compile(".*(\\.(" + FILTERS_TYPE +"))$");
+    }
+    
     String href = url.getURL().toLowerCase();
     //    return !FILTERS.matcher(href).matches() &&
     // href.startsWith("https://fund.eastmoney.com/420102.html?spm=aladin");
-    return href.startsWith("https://fund.eastmoney.com/420102.html?spm=aladin")
-        || href.startsWith("https://fund.eastmoney.com/001751.html?spm=aladin");
+    return href.startsWith(FUND_HOMEPAGE + FUND_NAME1)
+        || href.startsWith(FUND_HOMEPAGE + FUND_NAME2);
   }
 
   @Override
@@ -48,6 +54,11 @@ public class FundCrawler extends WebCrawler {
     }
 
     Document document = Jsoup.parse(((HtmlParseData) page.getParseData()).getHtml());
-    fundService.saveFundInfo(fundService.parseFundInfo(page.getWebURL().getPath(), document));
+    Fund fund = fundService.parseFundInfo(page.getWebURL().getPath(), document);
+    if (fund == null) {
+      return;
+    }
+    
+    fundService.saveFundInfo(fund);
   }
 }

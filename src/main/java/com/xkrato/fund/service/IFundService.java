@@ -16,7 +16,6 @@ public interface IFundService {
   public int addFund(Fund latestFund);
   
   public int addFund(List<Fund> funds);
-  
-  public int updateFundById(Fund latestFund);
-  
+
+  public int updateFundByUuid(String uuid, Fund latestFund);
 }
