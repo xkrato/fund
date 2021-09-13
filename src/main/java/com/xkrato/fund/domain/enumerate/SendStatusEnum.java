@@ -6,7 +6,7 @@ public enum SendStatusEnum {
   PROCESSING(2),
   SUCCESS(3),
   TIMEOUT(4),
-  FAILURE(5);
+  FAILURE(9);
 
   private int sendStatus;
 
