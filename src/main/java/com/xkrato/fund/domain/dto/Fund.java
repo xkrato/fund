@@ -1,4 +1,4 @@
-package com.xkrato.fund.domain;
+package com.xkrato.fund.domain.dto;
 
 import java.util.Date;
 import lombok.Data;
