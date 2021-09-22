@@ -26,3 +26,17 @@ spring:
       test-on-return: false
       # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
       test-while-idle: true
+
+
+3des:
+  key: 326a23480c26bc89246f85f3e8012345e782654bd8712509
+
+send-grid:
+  email:
+    sender: xuchuang0426@qq.com
+    receiver: xuchuang0426@outlook.com
+  subject:
+    fund: 基金经理变更，确认是否需要调仓
+  content:
+    fund: 基金经理发生变更，基金：
+  api-key: 8496C18139090062C6F1BF505BC0F6C8D8A003B0FC4F0868EE17E706876BA5E03C3151EF09A2B29AFB5D6BFBC27EA91500CAACF8886659300A92EF7F23A211B18A2A4E1342A347EB
